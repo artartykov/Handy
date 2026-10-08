@@ -530,6 +530,11 @@ pub struct AppSettings {
     /// `overlay_position` (position `none` → style `None`).
     #[serde(default = "default_overlay_style")]
     pub overlay_style: OverlayStyle,
+    /// Fork-only: transcribe through OpenRouter instead of a local model.
+    #[serde(default)]
+    pub openrouter_stt_enabled: bool,
+    /// Fork-only: OpenRouter transcription model id; empty uses the default.
+    pub openrouter_stt_model: String,
 }
 
 fn default_model() -> String {
@@ -993,6 +998,8 @@ pub fn get_default_settings() -> AppSettings {
         vad_enabled: default_vad_enabled(),
         vad_backend: VadBackend::default(),
         overlay_style: default_overlay_style(),
+        openrouter_stt_enabled: false,
+        openrouter_stt_model: crate::openrouter_stt::DEFAULT_MODEL.to_string(),
     }
 }
 
