@@ -1147,6 +1147,26 @@ impl TranscriptionManager {
             return Ok(String::new());
         }
 
+        // Fork-only: cloud transcription bypasses the local engine entirely but
+        // keeps Handy's text clean-up (custom words, fillers, normalization).
+        let settings = get_settings(&self.app_handle);
+        if crate::openrouter_stt::is_enabled(&settings) {
+            let raw = crate::openrouter_stt::transcribe(&settings, &audio)?;
+            let evidence = resolve_output_language_evidence(
+                &settings,
+                Some(settings.selected_language.as_str()),
+                &[],
+                false,
+            );
+            return Ok(post_process_transcription_text(
+                raw,
+                &settings,
+                false,
+                &evidence,
+                &[],
+            ));
+        }
+
         // Check if model is loaded, if not try to load it
         {
             // If the model is loading, wait for it to complete.

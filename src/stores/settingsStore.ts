@@ -197,6 +197,10 @@ const settingUpdaters: {
     commands.changeTranscribeGpuDevice(value as string | null),
   extra_recording_buffer_ms: (value) =>
     commands.changeExtraRecordingBufferSetting(value as number),
+  openrouter_stt_enabled: (value) =>
+    commands.changeOpenrouterSttEnabledSetting(value as boolean),
+  openrouter_stt_model: (value) =>
+    commands.changeOpenrouterSttModelSetting(value as string),
 };
 
 export const useSettingsStore = create<SettingsStore>()(
