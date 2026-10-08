@@ -72,8 +72,11 @@ jobs:
     with:
       platform: ${{ matrix.platform }}
       target: ${{ matrix.target }}
-      build-args: ${{ matrix.args }}
-      sign-binaries: true
+      # Fork: unsigned build, no Azure signCommand and no updater artifacts.
+      build-args: >-
+        ${{ matrix.args }} --config
+        '{"bundle":{"createUpdaterArtifacts":false,"windows":{"signCommand":null}}}'
+      sign-binaries: false
       asset-prefix: "handy"
       upload-artifacts: false
       release-id: ${{ needs.create-release.outputs.release-id }}
